@@ -1,0 +1,23 @@
+.body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  
+  background-color: blanchedalmond;
+}
+
+.horizontal-line {
+  border: 1px solid black;
+  width: 100vp;
+}
+.container {
+
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  margin-top: 20px;
+  height: 100%;
+  justify-content: space-between
+
+}

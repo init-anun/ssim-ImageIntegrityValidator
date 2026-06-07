@@ -1,118 +1,88 @@
-Project Structure Overview
+# 🖥️ React + TypeScript + Vite Frontend Dashboard
 
-my-app/
+This directory houses the frontend web dashboard for the Image Integrity Validator. Built using **React 18**, **TypeScript**, and **Vite**, it provides an intuitive, high-performance user interface for uploading files, displaying validation states, and rendering generated image comparison layers.
+
+---
+
+## 📁 Project Directory Structure
+
+```
+frontend/
 │
-├── index.html
-├── package.json
-├── vite.config.ts
-├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.node.json
-├── eslint.config.js
+├── public/               # Static public assets
 │
-├── public/
-│   └── vite.svg
+├── src/
+│   ├── api/
+│   │   └── client.ts     # Axios instance configured for http://127.0.0.1:8000/api/v1
+│   │
+│   ├── components/
+│   │   ├── InputBox.tsx  # Interactive drag-and-drop container for uploading images
+│   │   └── Title.tsx     # Typography header component
+│   │
+│   ├── pages/
+│   │   └── Detection.tsx # Primary dashboard workspace containing layout & image displays
+│   │
+│   ├── services/
+│   │   └── DetectionService.ts # Axios wrapper sending multipart image data to the backend
+│   │
+│   ├── types/
+│   │   └── detection.ts  # TypeScript type/interface schemas for API requests & responses
+│   │
+│   ├── App.tsx           # React app container mounting pages
+│   ├── App.css           # Styling sheets for the dashboard components
+│   ├── index.css         # Global styles and layout directives
+│   ├── main.tsx          # Client entrypoint mounting React tree
+│   └── vite-env.d.ts     # Vite environment types declaration
 │
-└── src/
-    ├── vite-env.d.ts
-    ├── assets/
-    │   ├── logo.svg
-    │   └── robots.txt
-    │
-    ├── api/
-    │   └── client.ts
-    │
-    ├── services/
-    │   └── userService.ts
-    │
-    ├── types/
-    │   └── user.ts
-    │
-    ├── components/
-    │
-    ├── pages/
-    │   └── Users.tsx
-    │
-    ├── App.tsx
-    ├── main.tsx
-    └── index.css
-
-
-
-
-
-
-
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+├── eslint.config.js      # ESLint configuration
+├── index.html            # Primary index page template
+├── package.json          # Dependency manifest
+├── tsconfig.json         # Master TypeScript settings
+└── vite.config.ts        # Vite execution and plugin settings
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔑 Key Core Modules
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Interactive Analysis Dashboard
+* **File**: [Detection.tsx](file:///home/arun/Documents/code/image-integrity-validator/fastAPI-react-app/frontend/src/pages/Detection.tsx)
+* **Function**: Handles local file states for `originalFile` and `tamperedFile`. Prevents submission if either is missing, triggers the network request using a loading spinner status, and renders a grid showing four results generated by the server:
+  1. **Original Scan Detected** (red rectangles highlighting layout variations)
+  2. **Tampered Scan Detected** (red rectangles highlighting tampered text/signatures)
+  3. **Structural Difference Map** (differential visual heatmap)
+  4. **Isolating Threshold Area** (monochrome layout separation)
+
+### 2. Network client configuration
+* **File**: [client.ts](file:///home/arun/Documents/code/image-integrity-validator/fastAPI-react-app/frontend/src/api/client.ts)
+* **Function**: Defines the base API client targeting the endpoint URL `/api/v1`.
+* **File**: [DetectionService.ts](file:///home/arun/Documents/code/image-integrity-validator/fastAPI-react-app/frontend/src/services/DetectionService.ts)
+* **Function**: Constructs a `FormData` object matching the backend parameters (`original_file` and `tampered_file`) and sends it as a `POST` request. Boundaries are handled natively by Axios to prevent parser exceptions on the backend.
+
+---
+
+## 🛠️ Setup & Running instructions
+
+### 🚀 Local Development Server
+1. Navigate to the frontend directory:
+   ```bash
+   cd fastAPI-react-app/frontend
+   ```
+
+2. Install dependency packages:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+   The local application will run on `http://localhost:5173`.
+
+### 📦 Production Build
+To create a optimized production bundle:
+```bash
+npm run build
 ```
+This generates build output assets under the `dist/` directory.
